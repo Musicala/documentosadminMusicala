@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Documentos empresariales | Musicala</title>
+  <style>
+    :root {
+      --bg: #f7f4ff;
+      --surface: #ffffff;
+      --surface-2: #fbf9ff;
+      --primary: #8c52ff;
+      --primary-dark: #6f34ea;
+      --accent: #f2a33a;
+      --text: #2f234d;
+      --muted: #73678f;
+      --border: #e8ddff;
+      --chip: #f3ecff;
+      --shadow: 0 16px 40px rgba(98, 49, 190, 0.12);
+      --radius-xl: 26px;
+      --radius-lg: 18px;
+      --radius-md: 14px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(140,82,255,.12), transparent 25%),
+        radial-gradient(circle at top right, rgba(242,163,58,.10), transparent 24%),
+        linear-gradient(180deg, #fcfbff 0%, #f6f2ff 100%);
+      min-height: 100vh;
+    }
+
+    .page {
+      width: min(1240px, calc(100% - 28px));
+      margin: 20px auto 36px;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #8c52ff 0%, #6f34ea 100%);
+      color: #fff;
+      border-radius: 30px;
+      padding: 28px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero::before,
+    .hero::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      background: rgba(255,255,255,.10);
+    }
+
+    .hero::before {
+      width: 220px;
+      height: 220px;
+      top: -70px;
+      right: -30px;
+    }
+
+    .hero::after {
+      width: 140px;
+      height: 140px;
+      bottom: -60px;
+      left: -30px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.16);
+      border: 1px solid rgba(255,255,255,.22);
+      font-size: .92rem;
+      font-weight: 600;
+    }
+
+    h1 {
+      margin: 14px 0 8px;
+      font-size: clamp(2rem, 3vw, 3rem);
+      line-height: 1.05;
+      letter-spacing: -.03em;
+    }
+
+    .subtitle {
+      margin: 0;
+      max-width: 760px;
+      color: rgba(255,255,255,.92);
+      line-height: 1.65;
+      font-size: 1rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 330px minmax(0, 1fr);
+      gap: 18px;
+      margin-top: 18px;
+    }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+    }
+
+    .sidebar {
+      padding: 18px;
+      position: sticky;
+      top: 14px;
+      align-self: start;
+    }
+
+    .panel-title {
+      margin: 0 0 6px;
+      font-size: 1.1rem;
+    }
+
+    .panel-copy {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: .95rem;
+    }
+
+    .search-wrap {
+      margin-top: 16px;
+      position: relative;
+    }
+
+    .search-wrap input {
+      width: 100%;
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      border-radius: 14px;
+      padding: 14px 14px 14px 42px;
+      font-size: .98rem;
+      outline: none;
+      color: var(--text);
+    }
+
+    .search-wrap input:focus {
+      border-color: #c8b2ff;
+      box-shadow: 0 0 0 4px rgba(140,82,255,.08);
+    }
+
+    .search-icon {
+      position: absolute;
+      top: 50%;
+      left: 14px;
+      transform: translateY(-50%);
+      color: var(--muted);
+      font-size: .95rem;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .chip {
+      border: 1px solid var(--border);
+      background: var(--chip);
+      color: var(--primary-dark);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: .9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: .18s ease;
+    }
+
+    .chip:hover { transform: translateY(-1px); }
+    .chip.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    .meta-box {
+      margin-top: 18px;
+      padding: 14px;
+      border-radius: 16px;
+      background: #faf7ff;
+      border: 1px dashed #d8c8ff;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: .92rem;
+    }
+
+    .content {
+      display: grid;
+      gap: 18px;
+    }
+
+    .topbar {
+      padding: 18px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .stats {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      padding: 10px 14px;
+      background: #faf7ff;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      font-size: .92rem;
+      color: var(--muted);
+    }
+
+    .btn, button.btn {
+      appearance: none;
+      border: none;
+      text-decoration: none;
+      cursor: pointer;
+      border-radius: 14px;
+      padding: 12px 16px;
+      font-size: .95rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: .18s ease;
+    }
+
+    .btn:hover, button.btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 24px rgba(111, 52, 234, 0.16);
+    }
+
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { background: var(--primary-dark); }
+    .btn-secondary {
+      background: #f6f2ff;
+      border: 1px solid var(--border);
+      color: var(--primary-dark);
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      min-height: 260px;
+    }
+
+    .card-body {
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      height: 100%;
+    }
+
+    .doc-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .doc-title {
+      margin: 0;
+      font-size: 1.02rem;
+      line-height: 1.35;
+    }
+
+    .doc-category {
+      flex-shrink: 0;
+      background: #f2ebff;
+      color: var(--primary-dark);
+      border: 1px solid #e1d2ff;
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-size: .8rem;
+      font-weight: 700;
+    }
+
+    .doc-desc {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.58;
+      font-size: .94rem;
+      min-height: 72px;
+    }
+
+    .doc-actions {
+      margin-top: auto;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .viewer {
+      padding: 18px;
+    }
+
+    .viewer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .viewer-title {
+      margin: 0;
+      font-size: 1.08rem;
+    }
+
+    .viewer-subtitle {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: .94rem;
+    }
+
+    .viewer-frame {
+      width: 100%;
+      min-height: 76vh;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: #fff;
+    }
+
+    .empty {
+      padding: 36px 18px;
+      text-align: center;
+      color: var(--muted);
+      background: #fcfbff;
+      border: 1px dashed var(--border);
+      border-radius: 18px;
+    }
+
+    .hidden { display: none !important; }
+
+    @media (max-width: 980px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: static;
+      }
+
+      .viewer-frame {
+        min-height: 62vh;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div class="badge">📂 Centro documental · Musicala</div>
+      <h1>Consulta documentos de forma clara y rápida</h1>
+      <p class="subtitle">
+        Este aplicativo está pensado para que cualquier persona pueda encontrar un documento,
+        leer su descripción y abrirlo sin tener que descifrar una hoja de cálculo como si fuera una ruleta administrativa del destino.
+      </p>
+      <div class="hero-actions">
+        <a href="#documentos" class="btn btn-primary">📄 Ver documentos</a>
+        <button id="btnOpenSheet" class="btn btn-secondary">🗂️ Ver archivo base</button>
+      </div>
+    </section>
+
+    <section class="layout" id="documentos">
+      <aside class="panel sidebar">
+        <h2 class="panel-title">Buscar y filtrar</h2>
+        <p class="panel-copy">Encuentren el documento por nombre, categoría o descripción.</p>
+
+        <div class="search-wrap">
+          <span class="search-icon">🔎</span>
+          <input id="searchInput" type="text" placeholder="Buscar documento..." />
+        </div>
+
+        <div id="categoryChips" class="chips"></div>
+
+        <div class="meta-box">
+          <strong>¿Qué muestra cada tarjeta?</strong><br />
+          Nombre del documento, categoría, descripción y acciones para abrir o descargar.
+        </div>
+      </aside>
+
+      <div class="content">
+        <section class="panel topbar">
+          <div>
+            <h2 class="panel-title" style="margin-bottom:4px;">Biblioteca documental</h2>
+            <p class="panel-copy">Información organizada a partir del archivo publicado de Google Sheets.</p>
+          </div>
+          <div class="stats">
+            <div class="stat"><strong id="totalDocs">0</strong> documentos</div>
+            <div class="stat"><strong id="visibleDocs">0</strong> visibles</div>
+          </div>
+        </section>
+
+        <section id="cardsSection" class="cards-grid"></section>
+
+        <section class="panel viewer">
+          <div class="viewer-header">
+            <div>
+              <h3 id="viewerTitle" class="viewer-title">Seleccionen un documento</h3>
+              <p id="viewerSubtitle" class="viewer-subtitle">Aquí se verá el archivo cuando abran uno.</p>
+            </div>
+            <div class="doc-actions">
+              <a id="viewerOpenBtn" class="btn btn-secondary hidden" target="_blank" rel="noopener noreferrer">↗️ Abrir</a>
+              <a id="viewerDownloadBtn" class="btn btn-primary hidden" target="_blank" rel="noopener noreferrer">⬇️ Descargar</a>
+            </div>
+          </div>
+          <div id="viewerEmpty" class="empty">Hagan clic en <strong>Ver documento</strong> para cargarlo aquí.</div>
+          <iframe id="viewerFrame" class="viewer-frame hidden" title="Visor de documentos"></iframe>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // IMPORTANTE:
+    // Reemplacen estos datos por la lectura real desde su fuente cuando quieran conectarlo.
+    // Dejé estructura lista para que sea intuitiva y fácil de mantener.
+
+    const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSZTdPTTQth67AD0Cp7WqvaYUejTFqFAFHWidpWISf3RsatQ3RUymcoubSjtx_g6qQSHjHxWr7KlQXB/pubhtml";
+    const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSZTdPTTQth67AD0Cp7WqvaYUejTFqFAFHWidpWISf3RsatQ3RUymcoubSjtx_g6qQSHjHxWr7KlQXB/pub?output=csv";
+
+    const fallbackDocumentsData = [
+      {
+        nombre: "Cámara de Comercio 2026",
+        categoria: "Comercial",
+        descripcion: "Certificado actualizado de existencia y representación legal de Musicala.",
+        linkVer: "https://drive.google.com/file/d/1jAS73FxCmv-M9F9BTc1",
+        linkDescarga: "https://drive.google.com/uc?export=download&id=1jAS73FxCmv-M9F9BTc1"
+      },
+      {
+        nombre: "Cédula del Representante Legal",
+        categoria: "Representante legal",
+        descripcion: "Fotocopia de la cédula de Jimmy Alexander Caballero.",
+        linkVer: "https://drive.google.com/file/d/1mkKs815bonmVhtXLY",
+        linkDescarga: "https://drive.google.com/uc?export=download&id=1mkKs815bonmVhtXLY"
+      },
+      {
+        nombre: "Certificación bancaria Bancolombia - Musicala",
+        categoria: "Bancaria",
+        descripcion: "Documento bancario con certificación de titularidad de la cuenta Bancolombia de Musicala.",
+        linkVer: "https://drive.google.com/file/d/1Skg6skofmQvkZjECd5I",
+        linkDescarga: "https://drive.google.com/uc?export=download&id=1Skg6skofmQvkZjECd5I"
+      },
+      {
+        nombre: "Certificación bancaria Davivienda - Musicala",
+        categoria: "Bancaria",
+        descripcion: "Documento bancario con certificación de titularidad de la cuenta Davivienda de Musicala.",
+        linkVer: "https://drive.google.com/file/d/18iMX9TyOHWCYD5-fkti",
+        linkDescarga: "https://drive.google.com/uc?export=download&id=18iMX9TyOHWCYD5-fkti"
+      },
+      {
+        nombre: "RUT Musicala",
+        categoria: "Comercial",
+        descripcion: "Registro Único Tributario vigente de Musicala.",
+        linkVer: "https://drive.google.com/file/d/18iMX9TyOHWCYD5-fkti",
+        linkDescarga: "https://drive.google.com/uc?export=download&id=18iMX9TyOHWCYD5-fkti"
+      },
+      {
+        nombre: "Certificación de composición accionaria",
+        categoria: "Legal",
+        descripcion: "Documento que certifica la composición accionaria o participación societaria de la organización.",
+        linkVer: "https://drive.google.com/file/d/1cAlekALkUJUap8-x-cJP",
+        linkDescarga: "https://drive.google.com/uc?export=download&id=1cAlekALkUJUap8-x-cJP"
+      }
+    ];
+
+    const state = {
+      query: "",
+      category: "Todas",
+      documents: []
+    };
+
+    const $cardsSection = document.getElementById("cardsSection");
+    const $searchInput = document.getElementById("searchInput");
+    const $categoryChips = document.getElementById("categoryChips");
+    const $totalDocs = document.getElementById("totalDocs");
+    const $visibleDocs = document.getElementById("visibleDocs");
+    const $viewerTitle = document.getElementById("viewerTitle");
+    const $viewerSubtitle = document.getElementById("viewerSubtitle");
+    const $viewerFrame = document.getElementById("viewerFrame");
+    const $viewerEmpty = document.getElementById("viewerEmpty");
+    const $viewerOpenBtn = document.getElementById("viewerOpenBtn");
+    const $viewerDownloadBtn = document.getElementById("viewerDownloadBtn");
+    const $btnOpenSheet = document.getElementById("btnOpenSheet");
+
+    function normalizeText(value = "") {
+      return String(value)
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .trim();
+    }
+
+    function getCategories() {
+      const unique = [...new Set(state.documents.map(doc => doc.categoria).filter(Boolean))].sort();
+      return ["Todas", ...unique];
+    }
+
+    function getFilteredDocuments() {
+      const q = normalizeText(state.query);
+      return state.documents.filter(doc => {
+        const matchesCategory = state.category === "Todas" || doc.categoria === state.category;
+        const haystack = normalizeText(`${doc.nombre} ${doc.categoria} ${doc.descripcion}`);
+        const matchesQuery = !q || haystack.includes(q);
+        return matchesCategory && matchesQuery;
+      });
+    }
+
+    function renderCategories() {
+      const categories = getCategories();
+      $categoryChips.innerHTML = categories.map(category => `
+        <button class="chip ${category === state.category ? "active" : ""}" data-category="${category}">
+          ${category}
+        </button>
+      `).join("");
+
+      $categoryChips.querySelectorAll("[data-category]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          state.category = btn.dataset.category;
+          renderAll();
+        });
+      });
+    }
+
+    function renderCards() {
+      const docs = getFilteredDocuments();
+      $totalDocs.textContent = state.documents.length;
+      $visibleDocs.textContent = docs.length;
+
+      if (!docs.length) {
+        $cardsSection.innerHTML = `
+          <div class="empty" style="grid-column:1/-1;">
+            No encontramos documentos con ese filtro. Increíblemente, esta vez no es culpa del usuario sino del filtro.
+          </div>
+        `;
+        return;
+      }
+
+      $cardsSection.innerHTML = docs.map((doc) => `
+        <article class="card">
+          <div class="card-body">
+            <div class="doc-head">
+              <h3 class="doc-title">${doc.nombre}</h3>
+              <span class="doc-category">${doc.categoria || "Sin categoría"}</span>
+            </div>
+            <p class="doc-desc">${doc.descripcion || "Sin descripción disponible."}</p>
+            <div class="doc-actions">
+              <button class="btn btn-primary" data-open-link="${encodeURIComponent(doc.linkVer || "")}" data-download-link="${encodeURIComponent(doc.linkDescarga || doc.linkVer || "")}" data-doc-title="${encodeURIComponent(doc.nombre || "Documento")}" data-doc-category="${encodeURIComponent(doc.categoria || "Sin categoría")}" data-doc-description="${encodeURIComponent(doc.descripcion || "Sin descripción")}">👀 Ver documento</button>
+              ${doc.linkDescarga
+                ? `<a class="btn btn-secondary" href="${doc.linkDescarga}" target="_blank" rel="noopener noreferrer">⬇️ Descargar</a>`
+                : ""}
+            </div>
+          </div>
+        </article>
+      `).join("");
+
+      $cardsSection.querySelectorAll("[data-open-link]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          openDocument({
+            nombre: decodeURIComponent(btn.dataset.docTitle || "Documento"),
+            categoria: decodeURIComponent(btn.dataset.docCategory || "Sin categoría"),
+            descripcion: decodeURIComponent(btn.dataset.docDescription || "Sin descripción"),
+            linkVer: decodeURIComponent(btn.dataset.openLink || ""),
+            linkDescarga: decodeURIComponent(btn.dataset.downloadLink || "")
+          });
+        });
+      });
+    }
+
+    function toPreviewUrl(url) {
+      if (!url) return "";
+
+      const match = url.match(/\/file\/d\/([^/]+)/);
+      if (match?.[1]) {
+        return `https://drive.google.com/file/d/${match[1]}/preview`;
+      }
+
+      return url;
+    }
+
+    function toDownloadUrl(url) {
+      if (!url) return "";
+
+      const match = url.match(/\/file\/d\/([^/]+)/);
+      if (match?.[1]) {
+        return `https://drive.google.com/uc?export=download&id=${match[1]}`;
+      }
+
+      return url;
+    }
+
+    function openDocument(doc) {
+      if (!doc) return;
+
+      $viewerTitle.textContent = doc.nombre;
+      $viewerSubtitle.textContent = `${doc.categoria || "Sin categoría"} · ${doc.descripcion || "Sin descripción"}`;
+
+      const viewUrl = doc.linkVer || "";
+      const previewUrl = toPreviewUrl(viewUrl);
+      const downloadUrl = doc.linkDescarga || toDownloadUrl(viewUrl);
+
+      if (previewUrl) {
+        $viewerFrame.src = previewUrl;
+        $viewerFrame.classList.remove("hidden");
+        $viewerEmpty.classList.add("hidden");
+      } else {
+        $viewerFrame.src = "";
+        $viewerFrame.classList.add("hidden");
+        $viewerEmpty.classList.remove("hidden");
+      }
+
+      if (viewUrl) {
+        $viewerOpenBtn.href = viewUrl;
+        $viewerOpenBtn.classList.remove("hidden");
+      } else {
+        $viewerOpenBtn.classList.add("hidden");
+      }
+
+      if (downloadUrl) {
+        $viewerDownloadBtn.href = downloadUrl;
+        $viewerDownloadBtn.classList.remove("hidden");
+      } else {
+        $viewerDownloadBtn.classList.add("hidden");
+      }
+
+      document.querySelector(".viewer").scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function renderAll() {
+      renderCategories();
+      renderCards();
+    }
+
+    $searchInput.addEventListener("input", (e) => {
+      state.query = e.target.value;
+      renderCards();
+    });
+
+    $btnOpenSheet.addEventListener("click", () => {
+      window.open(SHEET_URL, "_blank", "noopener,noreferrer");
+    });
+
+    function parseCsvLine(line) {
+      const result = [];
+      let current = "";
+      let inQuotes = false;
+
+      for (let i = 0; i < line.length; i++) {
+        const char = line[i];
+        const next = line[i + 1];
+
+        if (char === '"') {
+          if (inQuotes && next === '"') {
+            current += '"';
+            i++;
+          } else {
+            inQuotes = !inQuotes;
+          }
+        } else if (char === ',' && !inQuotes) {
+          result.push(current);
+          current = "";
+        } else {
+          current += char;
+        }
+      }
+
+      result.push(current);
+      return result.map(value => value.trim());
+    }
+
+    function csvToObjects(csvText) {
+      const lines = csvText.split(/\r?\n/).filter(Boolean);
+      if (!lines.length) return [];
+
+      const headers = parseCsvLine(lines[0]).map(h => normalizeText(h));
+      return lines.slice(1).map(line => {
+        const values = parseCsvLine(line);
+        const row = {};
+        headers.forEach((header, index) => {
+          row[header] = values[index] || "";
+        });
+        return row;
+      });
+    }
+
+    function mapRowToDocument(row) {
+      const link = row.link || row.enlace || row.url || "";
+      return {
+        nombre: row.documento || row.nombre || "Sin nombre",
+        categoria: row.categoria || "Sin categoría",
+        descripcion: row.descripcion || "Sin descripción disponible.",
+        linkVer: link,
+        linkDescarga: toDownloadUrl(link)
+      };
+    }
+
+    async function loadDocuments() {
+      try {
+        const response = await fetch(SHEET_CSV_URL, { cache: "no-store" });
+        if (!response.ok) throw new Error("No se pudo leer el CSV publicado");
+
+        const csvText = await response.text();
+        const rows = csvToObjects(csvText);
+        const docs = rows
+          .map(mapRowToDocument)
+          .filter(doc => doc.nombre && doc.nombre !== "Sin nombre");
+
+        state.documents = docs.length ? docs : [...fallbackDocumentsData];
+      } catch (error) {
+        console.error("Error cargando documentos:", error);
+        state.documents = [...fallbackDocumentsData];
+      }
+
+      renderAll();
+    }
+
+    loadDocuments();
+  </script>
+</body>
+</html>
